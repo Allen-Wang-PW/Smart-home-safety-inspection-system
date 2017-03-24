@@ -1,0 +1,86 @@
+{
+	"Device":
+	{
+		"Type":"Water Heater",
+		"Description":"1679",
+		"InternalVari":
+		[
+			{
+           		"Name":"temperature",
+                "Type":"int",
+				"Range":"0..30",
+                "Default":"20",
+				"public":"true"
+            }
+		],
+		"InitState":"WorkingState",
+		"WorkingState": 
+		[
+			{
+                "Name": "Waiting",
+                "Dynamic":
+				[
+					{
+						"VariableName":"temperature",
+						"ChangeRate":"0"
+					}
+				],
+				"Invariant":"true",
+				"Description":"Equipment is running on standby"
+            },
+            {
+                "Name": "Heating",
+				"Dynamic":
+				[
+					{
+						"VariableName":"temperature",
+						"ChangeRate":"2"
+					}
+				],
+				"Invariant":"temperature<=60",
+				"Description":"Equipment is running to heating water"
+            },
+            {
+                "Name": "Keeping",
+                "Dynamic":
+				[
+					{
+						"VariableName":"temperature",
+						"ChangeRate":"0"
+					}
+				],
+				"Invariant":"true",
+				"Description":"Equipment is running to keeping water warm"
+            }
+        ],
+       
+        "Transitions": 
+         [
+         	{
+        	 	"Name": "READY",
+				"StartState": "Heating",
+                "EndState": "Keeping",
+                "Trigger": "temperature==60",
+                "Assignments": [],
+				"Signal":"true"
+         	}
+         ],
+        "API": 
+        [
+            {
+        	 	"Name": "BEGIN",
+				"StartState": "Waiting",
+                "EndState": "Heating",
+				"Trigger": "", 
+                "Assignments":[
+                	{
+                		"Item":"temperature",
+                		"Value":"20"
+                	}
+                ],
+				"Signal":"true"
+         	}
+         	
+        ]
+	}
+}

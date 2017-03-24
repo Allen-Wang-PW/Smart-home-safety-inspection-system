@@ -1,0 +1,119 @@
+composedautomaton test
+variable
+para_0:25 in [-5,40];
+para_1:14 in [0,50];
+relation:true;
+automaton
+AC_Cooler_1:AC_Cooler_1(10);
+Rain_Detector_2:Rain_Detector_2(10);
+Smoke_Detector_3:Smoke_Detector_3(10);
+Window_4:Window_4(10);
+Trigger0:Trigger0(10);
+Trigger1:Trigger1(10);
+
+automaton AC_Cooler_1
+var:temperature,signal_t;
+synclabs:AC_Cooler_1_init,AC_Cooler_1_Activate,AC_Cooler_1_Pause,sensor_AC_Cooler_1_temperatureLT30_0,sensor_AC_Cooler_1_temperatureLT30_0,AC_Cooler_1_temperatureLT30_AC_Cooler_1_Activate;
+loc S0:while true
+	wait {signal_t'==0&temperature'==0}
+	when true sync AC_Cooler_1_init do {temperature':=25} goto OFF;
+loc OFF:while true
+	wait {signal_t'==0&temperature'==[-1,1]}
+	when temperature>para_0 sync sensor_AC_Cooler_1_temperatureLT30_0 goto OFF;
+	when true sync AC_Cooler_1_temperatureLT30_AC_Cooler_1_Activate goto Signal_Activate;
+loc Working:while true
+	wait {signal_t'==0&temperature'==-1}
+	when temperature>para_0 sync sensor_AC_Cooler_1_temperatureLT30_0 goto Working;
+loc Signal_Activate:while signal_t==0
+	wait {signal_t'==1&temperature'==0}
+	when true sync AC_Cooler_1_Activate do {signal_t':=0} goto Working;
+loc Signal_Pause:while signal_t==0
+	wait {signal_t'==1&temperature'==0}
+	when true sync AC_Cooler_1_Pause do {signal_t':=0} goto OFF;
+initially: S0;
+end
+
+automaton Rain_Detector_2
+var:signal_t;
+synclabs:Rain_Detector_2_init,Rain_Detector_2_Find_Rain,Rain_Detector_2_Rain_Stop;
+loc S0:while true
+	wait {signal_t'==0}
+	when true sync Rain_Detector_2_init goto Raining;
+loc NoRain:while true
+	wait {signal_t'==0}
+	when true sync Rain_Detector_2_Find_Rain goto Raining;
+loc Raining:while true
+	wait {signal_t'==0}
+	when true sync Rain_Detector_2_Rain_Stop goto NoRain;
+initially: S0;
+end
+
+automaton Smoke_Detector_3
+var:smoke_level,signal_t;
+synclabs:Smoke_Detector_3_init,Smoke_Detector_3_Level_DOWN,sensor_Smoke_Detector_3_smoke_levelEQ19_1,sensor_Smoke_Detector_3_smoke_levelEQ19_1,Smoke_Detector_3_smoke_levelEQ19_Smoke_Detector_3_Level_DOWN;
+loc S0:while true
+	wait {signal_t'==0&smoke_level'==0}
+	when true sync Smoke_Detector_3_init do {smoke_level':=0} goto LOW;
+loc LOW:while true
+	wait {signal_t'==0&smoke_level'==[-1,1]}
+	when smoke_level==para_1 sync sensor_Smoke_Detector_3_smoke_levelEQ19_1 goto LOW;
+	when true sync Smoke_Detector_3_smoke_levelEQ19_Smoke_Detector_3_Level_DOWN goto Signal_Level_DOWN;
+loc HIGH:while true
+	wait {signal_t'==0&smoke_level'==-1}
+	when smoke_level==para_1 sync sensor_Smoke_Detector_3_smoke_levelEQ19_1 goto HIGH;
+loc Signal_Level_DOWN:while signal_t==0
+	wait {signal_t'==1&smoke_level'==0}
+	when true sync Smoke_Detector_3_Level_DOWN do {signal_t':=0} goto HIGH;
+initially: S0;
+end
+
+automaton Window_4
+var:signal_t;
+synclabs:Window_4_init,Window_4_OPEN,Window_4_CLOSE;
+loc S0:while true
+	wait {signal_t'==0}
+	when true sync Window_4_init goto Closed;
+loc Opened:while true
+	wait {signal_t'==0}
+loc Closed:while true
+	wait {signal_t'==0}
+loc Signal_OPEN:while signal_t==0
+	wait {signal_t'==1}
+	when true sync Window_4_OPEN do {signal_t':=0} goto Opened;
+loc Signal_CLOSE:while signal_t==0
+	wait {signal_t'==1}
+	when true sync Window_4_CLOSE do {signal_t':=0} goto Closed;
+initially: S0;
+end
+
+automaton Trigger0
+var:Trigger0_timer;
+synclabs:Trigger0_init,sensor_AC_Cooler_1_temperatureLT30_0,AC_Cooler_1_temperatureLT30_AC_Cooler_1_Activate;
+loc S0:while true
+	wait {Trigger0_timer'==0}
+	when true sync Trigger0_init do {Trigger0_timer':=0} goto Ready;
+loc Ready:while true
+	wait {Trigger0_timer'==0}
+	when true sync sensor_AC_Cooler_1_temperatureLT30_0 do {Trigger0_timer':=0} goto Waiting;
+loc Waiting:while Trigger0_timer<=5
+	wait {Trigger0_timer'==1}
+	when Trigger0_timer>=3 sync AC_Cooler_1_temperatureLT30_AC_Cooler_1_Activate do {Trigger0_timer':=0} goto Ready;
+initially: S0;
+end
+
+automaton Trigger1
+var:Trigger1_timer;
+synclabs:Trigger1_init,sensor_Smoke_Detector_3_smoke_levelEQ19_1,Smoke_Detector_3_smoke_levelEQ19_Smoke_Detector_3_Level_DOWN;
+loc S0:while true
+	wait {Trigger1_timer'==0}
+	when true sync Trigger1_init do {Trigger1_timer':=0} goto Ready;
+loc Ready:while true
+	wait {Trigger1_timer'==0}
+	when true sync sensor_Smoke_Detector_3_smoke_levelEQ19_1 do {Trigger1_timer':=0} goto Waiting;
+loc Waiting:while Trigger1_timer<=5
+	wait {Trigger1_timer'==1}
+	when Trigger1_timer>=3 sync Smoke_Detector_3_smoke_levelEQ19_Smoke_Detector_3_Level_DOWN do {Trigger1_timer':=0} goto Ready;
+initially: S0;
+end
+
+forbidden={AC_Cooler_1.Working{temperature>30}&Rain_Detector_2.Raining&Smoke_Detector_3.HIGH{smoke_level>20}&Window_4.Closed&Trigger0.Ready&Trigger1.Ready};

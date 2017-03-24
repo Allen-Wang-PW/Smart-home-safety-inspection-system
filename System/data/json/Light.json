@@ -1,0 +1,53 @@
+{
+	"Device":
+	{
+		"Type":"Light",
+		"Description":"",
+		"InternalVari":
+		[
+		],
+		"InitState": "OFF",
+		"WorkingState": 
+		[
+			{
+                "Name": "ON",
+				"Dynamic":
+				[
+				],
+				"Invariant":"true",
+				"Description":"The light is on"
+            },
+            {
+                "Name": "OFF",
+                "Dynamic":
+				[
+				],
+				"Invariant":"true",
+				"Description":"The light is off"
+            }
+        ],
+		
+		"Transitions": 
+		[
+				
+		],
+		"API": [
+         	{
+        	 	"Name": "OPEN", 
+				"StartState": "OFF",
+                "EndState": "ON",
+                "Trigger": "", 
+                "Assignments":[ ],
+				"Signal":"true"
+         	},
+         	{
+        	 	"Name": "CLOSE",
+				"StartState": "ON",
+                "EndState": "OFF",		
+                "Trigger": "", 
+                "Assignments":[ ],
+				"Signal":"true"
+         	}
+        ]
+	}
+}

@@ -1,0 +1,5 @@
+para:
+para_0	-5	40	30
+para_1	0	50	19
+constraint:
+para_1>=0 and para_1-15<=0 and para_0-40<=0 and para_0+5>=0

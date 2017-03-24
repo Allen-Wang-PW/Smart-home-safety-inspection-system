@@ -1,0 +1,67 @@
+{
+	"Device":
+	{
+		"Type":"AC_Cooler",
+		"Description":"",
+		"InternalVari":
+		[
+			{
+           		"Name":"temperature",
+                "Default":"25",
+				"Range":"-5..40",
+				"public":"true"
+            }
+		],
+		"InitState": "OFF",
+		"WorkingState": 
+		[
+            {
+                "Name": "OFF",
+				"Dynamic":
+				[
+					{
+						"VariableName":"temperature",
+						"ChangeRate":"[-1,1]"
+					}
+				],
+				"Invariant":"true",
+				"Description":"The equipment is closed"
+            },
+            {
+                "Name": "Working",
+                "Dynamic":
+				[
+					{
+						"VariableName":"temperature",
+						"ChangeRate":"-1"
+					}
+				],
+				"Invariant":"true",
+				"Description":"The equipment is working"
+            }
+        ],
+		
+		"Transitions": 
+		[
+				
+		],
+		"API": [
+         	{
+        	 	"Name": "Activate", 
+				"StartState": "OFF",
+                "EndState": "Working",
+                "Trigger": "", 
+                "Assignments":[ ],
+				"Signal":"true"
+         	},
+         	{
+        	 	"Name": "Pause",
+				"StartState": "Working",
+                "EndState": "OFF",
+                "Trigger": "",
+                "Assignments":[ ],
+				"Signal":"true"
+         	}
+        ]
+	}
+}

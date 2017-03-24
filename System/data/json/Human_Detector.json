@@ -1,0 +1,53 @@
+{
+	"Device":
+	{
+		"Type":"Human_Detector",
+		"Description":"",
+		"InternalVari":
+		[
+		],
+		"InitState": "NoHuman",
+		"WorkingState": 
+		[
+			{
+                "Name": "NoHuman",
+				"Dynamic":
+				[
+				],
+				"Invariant":"true",
+				"Description":"There is no human in the room"
+            },
+            {
+                "Name": "BeHuman",
+                "Dynamic":
+				[
+				],
+				"Invariant":"true",
+				"Description":"There is some human in the room"
+            }
+        ],
+		
+		"Transitions": 
+		[
+			{
+        	 	"Name": "Human_OUT",
+				"StartState": "BeHuman",
+                "EndState": "NoHuman",
+                "Trigger": "", 
+                "Assignments":[ ],
+				"Signal":"true"
+         	},
+         	{
+        	 	"Name": "Human_IN",
+				"StartState": "NoHuman",
+                "EndState": "BeHuman",
+                "Trigger": "", 
+                "Assignments":[ ],
+				"Signal":"true"
+         	}	
+		],
+		"API": [
+
+        ]
+	}
+}

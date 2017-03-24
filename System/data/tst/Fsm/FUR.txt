@@ -1,0 +1,136 @@
+MODULE Smoke_Detector_1
+VAR
+	state: {LOW, HIGH};
+	smoke_level: 0..50;
+	level_down_a: boolean;
+ASSIGN
+	init(state) := LOW;
+	init(smoke_level) := 0;
+	init(level_down_a) := FALSE;
+
+MODULE Rain_Detector_2
+VAR
+	state: {NoRain, Raining};
+	find_rain_t: boolean;
+	rain_stop_t: boolean;
+ASSIGN
+	init(state) := Raining;
+	init(find_rain_t) := FALSE;
+	init(rain_stop_t) := FALSE;
+
+MODULE AC_Cooler_3
+VAR
+	state: {OFF, Working};
+	temperature: -5..40;
+	activate_a: boolean;
+	pause_a: boolean;
+ASSIGN
+	init(state) := OFF;
+	init(temperature) := 25;
+	init(activate_a) := FALSE;
+	init(pause_a) := FALSE;
+
+MODULE Window_4
+VAR
+	state: {Opened, Closed};
+	open_a: boolean;
+	close_a: boolean;
+ASSIGN
+	init(state) := Closed;
+	init(open_a) := FALSE;
+	init(close_a) := FALSE;
+
+MODULE main
+VAR
+	smoke_detector_1: Smoke_Detector_1;
+	rain_detector_2: Rain_Detector_2;
+	ac_cooler_3: AC_Cooler_3;
+	window_4: Window_4;
+
+ASSIGN
+	next(smoke_detector_1.state):=
+	case
+		smoke_detector_1.state=LOW & smoke_detector_1.smoke_level>19: HIGH;
+		TRUE: smoke_detector_1.state;
+	esac;
+
+	next(rain_detector_2.state):=
+	case
+		rain_detector_2.state=NoRain: Raining;
+		rain_detector_2.state=Raining: NoRain;
+		TRUE: rain_detector_2.state;
+	esac;
+
+	next(ac_cooler_3.state):=
+	case
+		ac_cooler_3.state=OFF & ac_cooler_3.temperature>30: Working;
+		TRUE: ac_cooler_3.state;
+	esac;
+
+	next(window_4.state):=
+	case
+		window_4.state=Opened & rain_detector_2.find_rain_t=TRUE: Closed;
+		TRUE: window_4.state;
+	esac;
+
+	next(smoke_detector_1.smoke_level):=
+	case
+		smoke_detector_1.smoke_level=50: {toint(smoke_detector_1.smoke_level), toint(smoke_detector_1.smoke_level)-1};
+		smoke_detector_1.smoke_level=0: {toint(smoke_detector_1.smoke_level), toint(smoke_detector_1.smoke_level)+1};
+		smoke_detector_1.state = LOW: {toint(smoke_detector_1.smoke_level)-1, toint(smoke_detector_1.smoke_level), toint(smoke_detector_1.smoke_level)+1};
+		smoke_detector_1.state = HIGH: toint(smoke_detector_1.smoke_level)-1;
+		TRUE: smoke_detector_1.smoke_level;
+	esac;
+
+	next(ac_cooler_3.temperature):=
+	case
+		ac_cooler_3.temperature=40: {toint(ac_cooler_3.temperature), toint(ac_cooler_3.temperature)-1};
+		ac_cooler_3.temperature=-5: {toint(ac_cooler_3.temperature), toint(ac_cooler_3.temperature)+1};
+		ac_cooler_3.state = OFF: {toint(ac_cooler_3.temperature)-1, toint(ac_cooler_3.temperature), toint(ac_cooler_3.temperature)+1};
+		ac_cooler_3.state = Working: toint(ac_cooler_3.temperature)-1;
+		TRUE: ac_cooler_3.temperature;
+	esac;
+
+	next(smoke_detector_1.level_down_a):=
+	case
+		smoke_detector_1.state=LOW & next(smoke_detector_1.state)=HIGH: TRUE;
+		TRUE: FALSE;
+	esac;
+
+	next(rain_detector_2.find_rain_t):=
+	case
+		rain_detector_2.state=NoRain & next(rain_detector_2.state)=Raining: TRUE;
+		TRUE: FALSE;
+	esac;
+
+	next(rain_detector_2.rain_stop_t):=
+	case
+		rain_detector_2.state=Raining & next(rain_detector_2.state)=NoRain: TRUE;
+		TRUE: FALSE;
+	esac;
+
+	next(ac_cooler_3.activate_a):=
+	case
+		ac_cooler_3.state=OFF & next(ac_cooler_3.state)=Working: TRUE;
+		TRUE: FALSE;
+	esac;
+
+	next(ac_cooler_3.pause_a):=
+	case
+		ac_cooler_3.state=Working & next(ac_cooler_3.state)=OFF: TRUE;
+		TRUE: FALSE;
+	esac;
+
+	next(window_4.open_a):=
+	case
+		window_4.state=Closed & next(window_4.state)=Opened: TRUE;
+		TRUE: FALSE;
+	esac;
+
+	next(window_4.close_a):=
+	case
+		window_4.state=Opened & next(window_4.state)=Closed: TRUE;
+		TRUE: FALSE;
+	esac;
+
+CTLSPEC AG( smoke_detector_1.smoke_level<20&ac_cooler_3.temperature<30 )

@@ -1,0 +1,54 @@
+{
+	"Device":
+	{
+		"Type":"Alarm",
+		"Description":"",
+		"InternalVari":
+		[
+	
+		],
+		"InitState": "OFF",
+		"WorkingState": 
+		[
+            {
+                "Name": "ON",
+				"Dynamic":
+				[
+				],
+				"Invariant":"true",
+				"Description":"The equipment is alarming"
+            },
+			{
+                "Name": "OFF",
+				"Dynamic":
+				[
+				],
+				"Invariant":"true",
+				"Description":"The equipment is standby"
+            }
+        ],
+		
+		"Transitions": 
+		[
+				
+		],
+		"API": [
+         	{
+        	 	"Name": "TURN_ON", 
+				"StartState": "OFF",
+                "EndState": "ON",
+                "Trigger": "", 
+                "Assignments":[ ],
+				"Signal":"true"
+         	},
+         	{
+        	 	"Name": "TURN_OFF",
+				"StartState": "ON",
+                "EndState": "OFF",		
+                "Trigger": "", 
+                "Assignments":[ ],
+				"Signal":"true"
+         	}
+         ]
+	}
+}

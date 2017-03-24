@@ -1,0 +1,53 @@
+{
+	"Device":
+	{
+		"Type":"Rain_Detector",
+		"Description":"",
+		"InternalVari":
+		[
+		],
+		"InitState": "Raining",
+		"WorkingState": 
+		[
+			{
+                "Name": "NoRain",
+				"Dynamic":
+				[
+				],
+				"Invariant":"true",
+				"Description":"The equipment find there is no rain outside"
+            },
+            {
+                "Name": "Raining",
+                "Dynamic":
+				[
+				],
+				"Invariant":"true",
+				"Description":"The equipment find it is raining outside"
+            }
+        ],
+
+		"Transitions": 
+		[
+			{
+                "Name": "Find_Rain", 
+                "StartState": "NoRain",
+                "EndState": "Raining",
+				"Trigger": "",
+                "Assignments":[ ],
+				"Signal":"true"
+                },
+            {
+                "Name": "Rain_Stop", 
+                "StartState": "Raining",
+                "EndState": "NoRain",
+				"Trigger": "",
+                "Assignments":[ ],
+				"Signal":"true"
+			}
+		],
+		"API": [
+
+        ]
+	}
+}

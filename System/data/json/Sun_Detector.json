@@ -1,0 +1,78 @@
+{
+	"Device":
+	{
+		"Type":"Sun_Detector",
+		"Description":"",
+		"InternalVari":
+		[
+			{
+           		"Name":"t",
+                "Type":"int",
+                "Default":"360",
+				"Range":"0..720",
+				"public":"false"
+            }
+		],
+		"InitState": "Day",
+		"WorkingState": 
+		[
+			{
+                "Name": "Day",
+                "Dynamic":
+				[
+					{
+						"VariableName":"t",
+						"ChangeRate":"-1"
+					}
+				],
+				"Invariant":"t>=0",
+				"Description":""
+            },
+			{
+                "Name": "Moon",
+                "Dynamic":
+				[
+					{
+						"VariableName":"t",
+						"ChangeRate":"1"
+					}
+				],
+				"Invariant":"t<=720",
+				"Description":""
+            }
+        ],
+		
+		"Transitions": 
+		[
+			{
+                "Name": "SunSet", 
+                "StartState": "Day",
+                "EndState": "Moon",
+				"Trigger": "t==0",
+                "Assignments":[
+                	{
+                		"Item":"t",
+                		"Value":"0"
+                	}
+                ],
+				"Signal":"true"
+            },
+			{
+                "Name": "SunRise", 
+                "StartState": "Moon",
+                "EndState": "Day",
+				"Trigger": "t==720", 
+                "Assignments":[
+                	{
+                		"Item":"t",
+                		"Value":"720"
+                	}
+                ],
+				"Signal":"true"
+            }
+		],
+		"API": [
+       
+        ]
+	}
+}

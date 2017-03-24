@@ -1,0 +1,54 @@
+{
+	"Device":
+	{
+		"Type":"TV",
+		"Description":"a normal TV",
+		"InternalVari":
+		[
+		],
+		"InitState": "Closed",
+		"WorkingState": 
+		[
+			{
+                "Name": "Opened",
+                "Dynamic": 
+				[
+				],
+				"Invariant":"true",
+				"Description":"TV is opened"
+            },
+            {
+                "Name": "Closed",
+				"Dynamic":
+				[
+				],
+				"Invariant":"true",
+				"Description":"TV is closed"
+            }
+        ],
+		
+		"Transitions": 
+		[
+				
+		],
+        "API": 
+        [
+            {
+				"Name": "CLOSE",
+				"StartState": "Opened",
+				"EndState": "Closed",
+				"Trigger": "", 
+                "Assignments":[ ],
+				"Signal":"true"	
+			},
+			{
+				"Name": "OPEN",
+				"StartState": "Closed",
+				"EndState": "Opened",
+				"Trigger": "", 
+                "Assignments":[ ],
+				"Signal":"true"	
+			}
+        ]
+	}
+}

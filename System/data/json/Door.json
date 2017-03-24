@@ -1,0 +1,53 @@
+{
+	"Device":
+	{
+		"Type":"Door",
+		"Description":"",
+		"InternalVari":
+		[
+		],
+		"InitState": "Closed",
+		"WorkingState": 
+		[
+			{
+                "Name": "Opened",
+				"Dynamic":
+				[
+				],
+				"Invariant":"true",
+				"Description":"The door has been raised"
+            },
+            {
+                "Name": "Closed",
+                "Dynamic":
+				[
+				],
+				"Invariant":"true",
+				"Description":"Equipment is running on standby"
+            }
+        ],
+		
+		"Transitions": 
+		[
+				
+		],
+		"API": [
+			{
+        	 	"Name": "OPEN", 
+				"StartState": "Closed",
+                "EndState": "Opened",
+                "Trigger": "", 
+                "Assignments":[ ],
+				"Signal":"true"
+         	},
+         	{
+        	 	"Name": "CLOSE",
+				"StartState": "Opened",
+                "EndState": "Closed",		
+                "Trigger": "", 
+                "Assignments":[ ],
+				"Signal":"true"
+         	}
+        ]
+	}
+}

@@ -1,0 +1,61 @@
+{
+	"Device":
+	{
+		"Type":"GPS",
+		"Description":"1537",
+		"InternalVari":
+		[
+			{
+           		"Name":"distance",
+				"Range":"0..200",
+                "Type":"int",
+                "Default":"200",
+				"public":"true"
+            }
+		],
+		"InitState": "Running",
+		"WorkingState": 
+		[
+            {
+                "Name": "Running",
+				"Dynamic":
+				[
+					{
+						"VariableName":"distance",
+						"ChangeRate":"-1"
+					}
+				],
+				"Invariant":"distance>=0",
+				"Description":"The car moving in this State"
+            },
+            {
+                "Name": "Stoped",
+                "Dynamic":
+				[
+					{
+						"VariableName":"distance",
+						"ChangeRate":"0"
+					}
+				],
+				"Invariant":"true",
+				"Description":"The location has been unchanged"
+            }
+        ],
+        
+         "Transitions": 
+         [
+			{
+                "Name": "ARRIVE", 
+				"StartState": "Running",
+                "EndState": "Stoped",
+                "Trigger": "distance==0",
+                "Assignments": [ ],
+				"Signal":"true"
+            }
+         ],
+        "API": 
+        [
+            
+        ]
+	}
+}
